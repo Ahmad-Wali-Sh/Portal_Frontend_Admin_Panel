@@ -1,1 +1,402 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   index.css — Portal Admin · Global Stylesheet
+   Tailwind CSS v4 · CSS-first configuration
+   No tailwind.config.js needed — all tokens live here in @theme {}
+───────────────────────────────────────────────────────────────────────────── */
+
 @import "tailwindcss";
+
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   @theme — Design Tokens
+   Everything defined here automatically generates utility classes.
+   --color-primary-500  →  bg-primary-500 / text-primary-500 / border-primary-500
+   --font-sans          →  font-sans
+   --radius-lg          →  rounded-lg
+   --shadow-*           →  shadow-* (all overridden to none — flat design)
+   --animate-*          →  animate-* (paired with @keyframes below)
+═════════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+
+  /* ── Colors ────────────────────────────────────────────────────────────── */
+
+  --color-background: #FFFFFF;
+  --color-foreground: #111827;
+  --color-border:     #E5E7EB;
+
+  /* Primary — Blue 500 */
+  --color-primary:     #3B82F6;
+  --color-primary-50:  #EFF6FF;
+  --color-primary-100: #DBEAFE;
+  --color-primary-200: #BFDBFE;
+  --color-primary-300: #93C5FD;
+  --color-primary-400: #60A5FA;
+  --color-primary-500: #3B82F6;
+  --color-primary-600: #2563EB;
+  --color-primary-700: #1D4ED8;
+  --color-primary-800: #1E40AF;
+  --color-primary-900: #1E3A8A;
+
+  /* Secondary — Emerald 500 */
+  --color-secondary:     #10B981;
+  --color-secondary-50:  #ECFDF5;
+  --color-secondary-100: #D1FAE5;
+  --color-secondary-200: #A7F3D0;
+  --color-secondary-300: #6EE7B7;
+  --color-secondary-400: #34D399;
+  --color-secondary-500: #10B981;
+  --color-secondary-600: #059669;
+  --color-secondary-700: #047857;
+  --color-secondary-800: #065F46;
+  --color-secondary-900: #064E3B;
+
+  /* Accent — Amber 500 */
+  --color-accent:     #F59E0B;
+  --color-accent-50:  #FFFBEB;
+  --color-accent-100: #FEF3C7;
+  --color-accent-200: #FDE68A;
+  --color-accent-300: #FCD34D;
+  --color-accent-400: #FBBF24;
+  --color-accent-500: #F59E0B;
+  --color-accent-600: #D97706;
+  --color-accent-700: #B45309;
+  --color-accent-800: #92400E;
+  --color-accent-900: #78350F;
+
+  /* Muted — Gray 100 */
+  --color-muted:            #F3F4F6;
+  --color-muted-foreground: #6B7280;
+
+  /* Destructive */
+  --color-destructive:            #EF4444;
+  --color-destructive-foreground: #FFFFFF;
+
+  /* Sidebar-specific tokens */
+  --color-sidebar-bg:          #FFFFFF;
+  --color-sidebar-active:      #EFF6FF;
+  --color-sidebar-active-text: #2563EB;
+  --color-sidebar-text:        #374151;
+  --color-sidebar-muted:       #9CA3AF;
+
+  /* ── Typography ────────────────────────────────────────────────────────── */
+
+  /* Overrides the default font-sans stack to Outfit */
+  --font-sans:    "Outfit", sans-serif;
+  --font-display: "Outfit", sans-serif;
+
+  /* ── Border Radius ─────────────────────────────────────────────────────── */
+  --radius-none: 0px;
+  --radius-sm:   4px;
+  --radius:      6px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-2xl:  16px;
+  --radius-full: 9999px;
+
+  /* ── Shadows — ALL ZEROED ──────────────────────────────────────────────── */
+  /* Flat design enforced at token level.                                     */
+  /* shadow-sm / shadow-md / etc. exist as classes but output nothing.        */
+  --shadow-sm:    none;
+  --shadow:       none;
+  --shadow-md:    none;
+  --shadow-lg:    none;
+  --shadow-xl:    none;
+  --shadow-2xl:   none;
+  --shadow-inner: none;
+
+  /* ── Layout spacing tokens ─────────────────────────────────────────────── */
+  /* Generates: w-sidebar, ml-sidebar, h-topbar, pb-bottombar, etc.          */
+  --spacing-sidebar:   240px;
+  --spacing-topbar:    64px;
+  --spacing-bottombar: 64px;
+
+  /* ── Animations ────────────────────────────────────────────────────────── */
+  /* Paired with @keyframes declarations below @theme                         */
+  --animate-fade-in:       fade-in 200ms ease-out both;
+  --animate-slide-in-left: slide-in-left 200ms ease-out both;
+  --animate-slide-in-up:   slide-in-up 200ms ease-out both;
+  --animate-scale-in:      scale-in 200ms ease-out both;
+}
+
+
+/* ── Keyframes — declared outside @theme ─────────────────────────────────── */
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   @layer base — Global resets and element defaults
+═════════════════════════════════════════════════════════════════════════════ */
+
+@layer base {
+
+  /* ── Plain CSS variables for JS runtime access (Recharts, canvas)  ──────── */
+  /* Use :root (not @theme) for values that should NOT generate utility classes */
+  :root {
+    --sidebar-width:    240px;
+    --topbar-height:    64px;
+    --bottombar-height: 64px;
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Prevent layout shift when scrollbar appears */
+    overflow-y: scroll;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    line-height: 1.5;
+  }
+
+  /* ── Heading base styles ────────────────────────────────────────────────── */
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--color-foreground);
+  }
+
+  h1 { font-size: 2.25rem;  font-weight: 800; }
+  h2 { font-size: 1.875rem; }
+  h3 { font-size: 1.5rem;   }
+  h4 { font-size: 1.25rem;  }
+
+  /* ── Focus ring — hard outline, no glow ────────────────────────────────── */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* ── Form elements inherit font ─────────────────────────────────────────── */
+  input, textarea, select, button {
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  /* ── Text selection highlight ───────────────────────────────────────────── */
+  ::selection {
+    background-color: var(--color-primary);
+    color: #ffffff;
+  }
+
+  /* ── Thin scrollbar ─────────────────────────────────────────────────────── */
+  ::-webkit-scrollbar       { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--color-muted); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-muted-foreground);
+  }
+}
+
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   @layer components — Reusable semantic class compositions
+   @apply is valid here and resolves against @theme tokens defined above.
+═════════════════════════════════════════════════════════════════════════════ */
+
+@layer components {
+
+  /* ── App layout: main content area ─────────────────────────────────────── */
+  .main-content {
+    @apply min-h-screen transition-all duration-300;
+    padding-top: var(--topbar-height);
+    padding-bottom: var(--bottombar-height);
+  }
+
+  @media (min-width: 1024px) {
+    .main-content {
+      margin-left: var(--sidebar-width);
+      padding-bottom: 0;
+    }
+  }
+
+  .main-content-inner {
+    @apply p-6;
+    max-width: 1400px;
+    margin-inline: auto;
+  }
+
+  /* ── Sidebar nav item ────────────────────────────────────────────────────── */
+  .nav-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-md
+           text-sm font-medium cursor-pointer select-none
+           transition-all duration-200;
+    color: var(--color-sidebar-text);
+  }
+
+  .nav-item:hover {
+    @apply bg-muted;
+    color: var(--color-foreground);
+  }
+
+  .nav-item.active {
+    background-color: var(--color-primary-50);
+    color: var(--color-primary-600);
+    border-left: 4px solid var(--color-primary);
+    /* Pull left so border aligns flush with sidebar edge */
+    padding-left: calc(0.75rem - 4px);
+  }
+
+  /* ── Sidebar group label ─────────────────────────────────────────────────── */
+  .nav-group-label {
+    @apply px-3 pt-5 pb-1;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-sidebar-muted);
+  }
+
+  /* ── Data table ──────────────────────────────────────────────────────────── */
+  .data-table          { @apply w-full border-collapse; }
+  .data-table thead    { background-color: var(--color-muted); }
+  .data-table th {
+    @apply text-left px-4 py-3;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted-foreground);
+  }
+  .data-table td {
+    @apply px-4 py-3 text-sm;
+    color: var(--color-foreground);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .data-table tbody tr {
+    background-color: var(--color-background);
+    transition: background-color 150ms ease-out;
+  }
+  .data-table tbody tr:hover {
+    background-color: var(--color-primary-50);
+  }
+  .data-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* ── Status badges ───────────────────────────────────────────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold;
+  }
+  .badge-blue  { background-color: var(--color-primary-100);   color: var(--color-primary-700); }
+  .badge-green { background-color: var(--color-secondary-100); color: var(--color-secondary-700); }
+  .badge-amber { background-color: var(--color-accent-100);    color: var(--color-accent-700); }
+  .badge-red   { background-color: #FEE2E2; color: #B91C1C; }
+  .badge-gray  { background-color: var(--color-muted); color: var(--color-muted-foreground); }
+
+  /* ── Form layout helpers ─────────────────────────────────────────────────── */
+  .form-grid   { @apply grid grid-cols-1 md:grid-cols-2 gap-4; }
+  .form-grid-3 { @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4; }
+  .form-section { @apply space-y-4; }
+
+  .form-section-title {
+    @apply pb-2;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted-foreground);
+    border-bottom: 2px solid var(--color-muted);
+  }
+
+  /* ── Stat card ───────────────────────────────────────────────────────────── */
+  .stat-card {
+    @apply bg-background rounded-lg p-6 cursor-default transition-all duration-200 hover:scale-[1.02];
+  }
+}
+
+
+/* ═════════════════════════════════════════════════════════════════════════════
+   @utility — Custom atomic utilities
+   Unlike @layer utilities, these support all variants: hover:, lg:, dark:, etc.
+═════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Bold display text ────────────────────────────────────────────────────── */
+@utility text-display {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* ── Small all-caps label text ───────────────────────────────────────────── */
+@utility text-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ── Primary accent bar decoration ───────────────────────────────────────── */
+@utility accent-bar {
+  display: block;
+  width: 2.5rem;
+  height: 4px;
+  border-radius: 9999px;
+  background-color: var(--color-primary);
+  margin-bottom: 0.75rem;
+}
+
+/* ── Positioned background geometry helpers ──────────────────────────────── */
+@utility geo-circle {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+@utility geo-square {
+  position: absolute;
+  border-radius: 6px;
+  pointer-events: none;
+  rotate: 45deg;
+}
+
+/* ── Thin scrollbar utility ──────────────────────────────────────────────── */
+@utility scroll-area {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) var(--color-muted);
+}
+
+/* ── Table cell truncation ───────────────────────────────────────────────── */
+@utility truncate-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+/* ── Staggered entry animation delays ────────────────────────────────────── */
+@utility stagger-1 { animation-delay: 50ms; }
+@utility stagger-2 { animation-delay: 100ms; }
+@utility stagger-3 { animation-delay: 150ms; }
+@utility stagger-4 { animation-delay: 200ms; }
+@utility stagger-5 { animation-delay: 250ms; }
