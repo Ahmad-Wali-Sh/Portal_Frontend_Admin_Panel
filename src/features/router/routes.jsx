@@ -6,7 +6,7 @@ const routes = [
         element: <h1>Hello</h1>,
         layout: true,
         protected: false
-    }
+    },
 ]
 
 
