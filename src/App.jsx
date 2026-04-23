@@ -1,8 +1,12 @@
 import React from 'react'
+import { BrowserRouter } from 'react-router'
+import PortalRoutes from './features/router/PortalRoutes'
 
 function App() {
   return (
-    <div className='bg-amber-600'>App</div>
+    <BrowserRouter>
+      <PortalRoutes />
+    </BrowserRouter>
   )
 }
 
