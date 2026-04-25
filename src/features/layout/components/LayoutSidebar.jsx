@@ -20,14 +20,14 @@ function NavItem({ item, collapsed, isDark, inFlyout = false }) {
       to={item.path}
       title={collapsed && !inFlyout ? item.label : undefined}
       className={cn(
-        'group flex items-start gap-3 rounded-md cursor-pointer select-none',
+        'group flex items-start gap-3 rounded-md cursor-pointer select-none text-left',
         'transition-all duration-200 relative',
         // Layout
         inFlyout
-          ? 'px-3 py-2 w-full'
+          ? 'w-full justify-start px-3 py-2'
           : collapsed
           ? 'justify-center px-0 py-2.5 mx-1'
-          : 'px-3 py-2.5',
+          : 'w-full justify-start px-3 py-2.5',
         // Active
         isActive
           ? cn(
@@ -58,7 +58,7 @@ function NavItem({ item, collapsed, isDark, inFlyout = false }) {
       />
 
       {(!collapsed || inFlyout) && (
-        <span className={cn('truncate flex-1', inFlyout ? 'text-xs' : 'text-sm')}>
+        <span className={cn('truncate flex-1 text-left', inFlyout ? 'text-xs' : 'text-sm')}>
           {item.label}
         </span>
       )}
@@ -96,7 +96,7 @@ function FlyoutPopover({ section, isDark, top, onMouseEnter, onMouseLeave }) {
         >
           <p
             className={cn(
-              'text-label',
+              'text-label text-left',
               isDark ? 'text-gray-500' : 'text-muted-foreground'
             )}
           >
@@ -147,13 +147,13 @@ function CollapsibleGroup({ section, isDark }) {
       <button
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          'w-full flex  gap-2 px-3 py-1.5 rounded-md mt-3 mb-0.5',
+          'w-full flex items-center justify-start gap-2 px-3 py-1.5 rounded-md mt-3 mb-0.5 text-left',
           'transition-colors duration-150 cursor-pointer select-none group'
         )}
       >
         <span
           className={cn(
-            'flex-1 text-label transition-colors duration-150',
+            'flex-1 text-left text-label transition-colors duration-150',
             hasActive
               ? isDark ? 'text-primary-400' : 'text-primary-600'
               : isDark ? 'text-gray-500 group-hover:text-gray-300' : 'text-muted-foreground group-hover:text-gray-500'
