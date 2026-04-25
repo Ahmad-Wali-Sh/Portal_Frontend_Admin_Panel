@@ -1,4 +1,5 @@
 import StudentsPage from "../student/StudentPage";
+import SubjectPage from "../subjects/SubjectPage";
 
 
 const routes = [
@@ -11,6 +12,12 @@ const routes = [
     {
         path: '/students',
         element: <StudentsPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/subjects',
+        element: <SubjectPage />,
         layout: true,
         protected: false
     }
