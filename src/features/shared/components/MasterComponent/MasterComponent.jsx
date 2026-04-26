@@ -202,13 +202,11 @@ export default function MasterComponent({ config, isDark, title, subtitle }) {
   const handleSuccess = useCallback((mode, record) => {
     if (mode === 'created') {
       config.onCreated?.(record)
-      setTab('list')
     } else {
       config.onUpdated?.(record)
-      // Stay on edit tab but update the record in state
-      setEditRecord(record)
     }
-    // Refresh list
+    setTab('list')
+    setEditRecord(null)
     listRefreshRef.current?.refresh()
   }, [config])
 
