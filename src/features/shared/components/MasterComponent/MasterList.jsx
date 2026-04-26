@@ -211,6 +211,9 @@ export default function MasterList({ config, isDark, onEdit }) {
 
   const columns = config.columns ?? []
   const hasFilters = config.filters?.length > 0
+  const normalizedError = error?.includes('status code 404')
+    ? `${config.entityName ?? 'Records'} service is currently unavailable (404).`
+    : error
 
   // Expose refresh so MasterComponent can trigger it
   if (config._listRef) config._listRef.current = { refresh: fetchData }
@@ -306,21 +309,31 @@ export default function MasterList({ config, isDark, onEdit }) {
 
       {/* ── Table ────────────────────────────────────────────────────────── */}
       <div className={cn(
-        'rounded-lg overflow-hidden border',
-        isDark ? 'border-gray-800' : 'border-border'
+        'rounded-lg overflow-hidden border transition-all duration-200',
+        isDark
+          ? 'border-slate-700/70 bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95'
+          : 'border-border bg-white'
       )}>
         {/* Error state */}
         {error && (
           <div className={cn(
-            'flex items-center gap-2 px-4 py-3 text-sm',
-            isDark ? 'bg-red-950/40 text-red-400' : 'bg-red-50 text-red-700'
+            'mx-3 mt-3 mb-2 flex items-start gap-2.5 rounded-md border px-3.5 py-2.5 text-sm',
+            isDark
+              ? 'border-red-500/35 bg-red-950/35 text-red-200'
+              : 'border-red-200 bg-red-50 text-red-700'
           )}>
-            <AlertCircle size={15} /> {error}
+            <span className={cn(
+              'mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full',
+              isDark ? 'bg-red-500/20 text-red-300' : 'bg-red-100 text-red-600'
+            )}>
+              <AlertCircle size={13} />
+            </span>
+            <span>{normalizedError}</span>
           </div>
         )}
 
         <div className="overflow-x-auto">
-          <table className="data-table">
+          <table className={cn('data-table', isDark && 'data-table-dark')}>
             <thead>
               <tr>
                 {columns.map((col) => (
@@ -347,14 +360,23 @@ export default function MasterList({ config, isDark, onEdit }) {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={columns.length + 1} className="text-center py-12">
-                    <Loader2 size={22} className="animate-spin mx-auto text-muted-foreground" />
+                  <td colSpan={columns.length + 1} className={cn(
+                    'text-center py-14',
+                    isDark ? 'text-slate-400' : 'text-muted-foreground'
+                  )}>
+                    <Loader2 size={22} className="animate-spin mx-auto" />
                   </td>
                 </tr>
               ) : data.length === 0 ? (
                 <tr>
-                  <td colSpan={columns.length + 1} className="text-center py-12">
-                    <p className="text-sm text-muted-foreground">
+                  <td colSpan={columns.length + 1} className={cn(
+                    'text-center py-16',
+                    isDark && 'bg-slate-950/35'
+                  )}>
+                    <p className={cn(
+                      'text-sm',
+                      isDark ? 'text-slate-300' : 'text-muted-foreground'
+                    )}>
                       {search || activeFilterCount > 0
                         ? 'No results match your search.'
                         : config.emptyMessage ?? 'No records yet.'}
@@ -366,7 +388,7 @@ export default function MasterList({ config, isDark, onEdit }) {
                   <tr
                     key={row.id ?? i}
                     className={cn(
-                      isDark && 'bg-gray-900 hover:bg-gray-800 border-b border-gray-800 last:border-0'
+                      isDark && 'bg-transparent hover:bg-slate-800/45 border-b border-slate-700/60 last:border-0'
                     )}
                   >
                     {columns.map((col) => (
