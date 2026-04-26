@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom'
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { NavLink, useLocation } from 'react-router'
 import { ChevronDown } from 'lucide-react'
@@ -76,49 +77,37 @@ function NavItem({ item, collapsed, isDark, inFlyout = false }) {
 // FlyoutPopover — appears on hover over a group in collapsed rail mode
 // ─────────────────────────────────────────────────────────────────────────────
 function FlyoutPopover({ section, isDark, top, onMouseEnter, onMouseLeave }) {
-  return (
+  const menu = (
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      style={{ top }}
+      style={{ 
+        position: 'fixed',
+        top: `${top}px`, 
+        left: '64px',
+        zIndex: 99999
+      }}
       className={cn(
-        'fixed left-16 z-modal w-48 rounded-lg border overflow-hidden animate-slide-in-left',
+        'w-48 rounded-lg border shadow-xl overflow-hidden animate-slide-in-left',
         isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-border'
       )}
     >
-      {/* Group label header */}
       {section.group && (
-        <div
-          className={cn(
-            'px-3 py-2 border-b',
-            isDark ? 'border-gray-800' : 'border-border'
-          )}
-        >
-          <p
-            className={cn(
-              'text-label text-left',
-              isDark ? 'text-gray-500' : 'text-muted-foreground'
-            )}
-          >
+        <div className={cn('px-3 py-2 border-b', isDark ? 'border-gray-800' : 'border-border')}>
+          <p className={cn('text-[10px] font-bold uppercase tracking-wider', isDark ? 'text-gray-500' : 'text-muted-foreground')}>
             {section.group}
           </p>
         </div>
       )}
-
-      {/* Items */}
       <div className="py-1 px-1.5">
         {section.items.map((item) => (
-          <NavItem
-            key={item.path}
-            item={item}
-            collapsed={false}
-            isDark={isDark}
-            inFlyout
-          />
+          <NavItem key={item.path} item={item} collapsed={false} isDark={isDark} inFlyout />
         ))}
       </div>
     </div>
-  )
+  );
+
+  return createPortal(menu, document.body);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
