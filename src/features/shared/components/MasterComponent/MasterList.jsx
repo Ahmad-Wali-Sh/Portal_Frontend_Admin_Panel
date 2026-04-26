@@ -253,8 +253,11 @@ export default function MasterList({ config, isDark, onEdit }) {
     );
   };
 
-  const columns = config.columns ?? [];
-  const hasFilters = config.filters?.length > 0;
+  const columns = config.columns ?? []
+  const hasFilters = config.filters?.length > 0
+  const normalizedError = error?.includes('status code 404')
+    ? `${config.entityName ?? 'Records'} service is currently unavailable (404).`
+    : error
 
   // Expose refresh so MasterComponent can trigger it
   if (config._listRef) config._listRef.current = { refresh: fetchData };
@@ -375,7 +378,7 @@ export default function MasterList({ config, isDark, onEdit }) {
         )}
 
         <div className="overflow-x-auto">
-          <table className="data-table">
+          <table className={cn('data-table', isDark && 'data-table-dark')}>
             <thead>
               <tr>
                 {columns.map((col) => (
