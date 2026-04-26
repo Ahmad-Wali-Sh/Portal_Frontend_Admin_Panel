@@ -331,7 +331,8 @@ export default function MasterList({ config, isDark, onEdit }) {
                     className={cn(
                       col.sortable && 'cursor-pointer select-none hover:text-foreground transition-colors',
                       col.align === 'right' && 'text-right',
-                      col.align === 'center' && 'text-center'
+                      col.align === 'center' && 'text-center',
+                      config.headerCellClassName
                     )}
                   >
                     <span className="inline-flex items-center">
@@ -366,7 +367,8 @@ export default function MasterList({ config, isDark, onEdit }) {
                   <tr
                     key={row.id ?? i}
                     className={cn(
-                      isDark && 'bg-gray-900 hover:bg-gray-800 border-b border-gray-800 last:border-0'
+                      isDark && 'bg-gray-900 hover:bg-gray-800 border-b border-gray-800 last:border-0',
+                      typeof config.rowClassName === 'function' ? config.rowClassName(row) : config.rowClassName
                     )}
                   >
                     {columns.map((col) => (
@@ -375,6 +377,7 @@ export default function MasterList({ config, isDark, onEdit }) {
                         className={cn(
                           col.align === 'right' && 'text-right',
                           col.align === 'center' && 'text-center',
+                          config.cellClassName,
                           col.className
                         )}
                       >

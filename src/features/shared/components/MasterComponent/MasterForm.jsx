@@ -327,7 +327,10 @@ export default function MasterForm({ config, mode, record, isDark, onSuccess, on
         const raw = record[f.key]
         populated[f.key] = raw !== undefined && raw !== null ? raw : (f.defaultValue ?? '')
       }
-      setValues(populated)
+      const mappedValues = config.mapRecordToValues
+        ? config.mapRecordToValues(record, populated)
+        : populated
+      setValues(mappedValues)
       setErrors({})
       setGlobalError(null)
       setConfirmDelete(false)
@@ -339,7 +342,12 @@ export default function MasterForm({ config, mode, record, isDark, onSuccess, on
   }, [mode, record]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleChange = (key, val) => {
-    setValues((prev) => ({ ...prev, [key]: val }))
+    setValues((prev) => {
+      const next = { ...prev, [key]: val }
+      return config.deriveValues
+        ? (config.deriveValues(next, { key, value: val, mode }) ?? next)
+        : next
+    })
     setErrors((prev) => { const next = { ...prev }; delete next[key]; return next })
   }
 

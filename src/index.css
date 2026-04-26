@@ -303,6 +303,23 @@
     border-bottom: none;
   }
 
+  .dark .data-table thead {
+    background-color: #111827;
+  }
+  .dark .data-table th {
+    color: #9CA3AF;
+  }
+  .dark .data-table td {
+    color: #F3F4F6;
+    border-bottom-color: #1F2937;
+  }
+  .dark .data-table tbody tr {
+    background-color: #030712;
+  }
+  .dark .data-table tbody tr:hover {
+    background-color: #111827;
+  }
+
   /* ── Status badges ───────────────────────────────────────────────────────── */
   .badge {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold;
@@ -310,6 +327,13 @@
   .badge-blue  { background-color: var(--color-primary-100);   color: var(--color-primary-700); }
   .badge-green { background-color: var(--color-secondary-100); color: var(--color-secondary-700); }
   .badge-amber { background-color: var(--color-accent-100);    color: var(--color-accent-700); }
+  .dark .badge {
+    background-color: #1F2937;
+    color: #E5E7EB;
+  }
+  .dark .badge-blue  { background-color: #172554; color: #BFDBFE; }
+  .dark .badge-green { background-color: #052E16; color: #A7F3D0; }
+  .dark .badge-amber { background-color: #451A03; color: #FDE68A; }
   .badge-red   { background-color: #FEE2E2; color: #B91C1C; }
   .badge-gray  { background-color: var(--color-muted); color: var(--color-muted-foreground); }
 
