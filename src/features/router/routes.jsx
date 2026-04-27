@@ -1,3 +1,4 @@
+import ClassesPage from "../classes/ClassesPage";
 import StudentsPage from "../student/StudentPage";
 
 
@@ -11,6 +12,12 @@ const routes = [
     {
         path: '/students',
         element: <StudentsPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/classes',
+        element: <ClassesPage />,
         layout: true,
         protected: false
     }
