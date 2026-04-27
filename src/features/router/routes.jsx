@@ -1,4 +1,4 @@
-import EmployeesPage from "../employee/employeePage";
+import EmployeesPage from "../employee/EmployeePage";
 import StudentsPage from "../student/StudentPage";
 import SubjectPage from "../subjects/SubjectPage";
 import CurriculumPage from "../curriculum/CurriculumPage";  
@@ -32,6 +32,12 @@ const routes = [
     {
         path: '/curriculum',
         element: <CurriculumPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/resources',
+        element: <ResourcePage />,
         layout: true,
         protected: false
     }
