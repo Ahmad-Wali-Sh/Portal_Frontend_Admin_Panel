@@ -1,4 +1,5 @@
 import EmployeesPage from "../employee/EmployeePage";
+import ProfilePage from "../profile/ProfilePage";
 import StudentsPage from "../student/StudentPage";
 import SubjectPage from "../subjects/SubjectPage";
 import CertificatePage from "../certificates/page/CertificatePage";
@@ -32,6 +33,11 @@ const routes = [
         protected: false
     },
     {
+        path: '/profile',
+        element: <ProfilePage/>,
+        layout: true,
+        protected: false,
+    },{
         path: '/certificates',
         element: <CertificatePage />,
         layout: true,
