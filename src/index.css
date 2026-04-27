@@ -302,6 +302,23 @@
   .data-table tbody tr:last-child td {
     border-bottom: none;
   }
+  .data-table-dark thead {
+    background: linear-gradient(90deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.92));
+    border-bottom: 1px solid rgba(100, 116, 139, 0.45);
+  }
+  .data-table-dark th {
+    color: #94A3B8;
+  }
+  .data-table-dark td {
+    color: #E2E8F0;
+    border-bottom-color: rgba(71, 85, 105, 0.5);
+  }
+  .data-table-dark tbody tr {
+    background-color: transparent;
+  }
+  .data-table-dark tbody tr:hover {
+    background-color: rgba(59, 130, 246, 0.08);
+  }
 
   /* ── Status badges ───────────────────────────────────────────────────────── */
   .badge {

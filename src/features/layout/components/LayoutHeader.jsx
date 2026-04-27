@@ -12,6 +12,8 @@ import {
 } from 'lucide-react'
 import { cn } from '../../../utils/utils'
 import { timeAgo } from '../../../utils/utils'
+import { useNavigate } from 'react-router'
+
 
 // ── Mock data ─────────────────────────────────────────────────────────────────
 const MOCK_USER = {
@@ -66,7 +68,7 @@ function NotificationDropdown({ isDark, onClose }) {
   return (
     <div
       className={cn(
-        'absolute right-0 top-full mt-2 w-80 rounded-lg border overflow-hidden z-modal animate-slide-in-up',
+        'absolute right-0 top-full mt-2 w-80 rounded-lg border overflow-hidden z-[110] animate-slide-in-up',
         isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-border'
       )}
     >
@@ -93,7 +95,7 @@ function NotificationDropdown({ isDark, onClose }) {
         {unread > 0 && (
           <button
             onClick={markAllRead}
-            className="text-xs font-medium text-primary hover:text-primary-700 transition-colors"
+            className="text-xs font-medium transition-colors text-primary hover:text-primary-700"
           >
             Mark all read
           </button>
@@ -101,9 +103,9 @@ function NotificationDropdown({ isDark, onClose }) {
       </div>
 
       {/* Items */}
-      <div className="divide-y divide-border max-h-72 overflow-y-auto scroll-area">
+      <div className="overflow-y-auto divide-y divide-border max-h-72 scroll-area">
         {items.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-8">
+          <p className="py-8 text-sm text-center text-muted-foreground">
             You're all caught up
           </p>
         ) : (
@@ -164,7 +166,7 @@ function NotificationDropdown({ isDark, onClose }) {
           isDark ? 'border-gray-800' : 'border-border'
         )}
       >
-        <button className="text-xs font-medium text-primary hover:text-primary-700 transition-colors">
+        <button className="text-xs font-medium transition-colors text-primary hover:text-primary-700">
           View all notifications
         </button>
       </div>
@@ -174,15 +176,16 @@ function NotificationDropdown({ isDark, onClose }) {
 
 // ── Subcomponent: User Profile Dropdown ──────────────────────────────────────
 function UserDropdown({ user, isDark, onClose }) {
+  const navigate = useNavigate()
   const menuItems = [
-    { label: 'My Profile', icon: User, action: () => {} },
-    { label: 'Settings',   icon: Settings, action: () => {} },
-  ]
+  { label: 'My Profile', icon: User, action: () => { navigate('/profile'); onClose() } },
+  { label: 'Settings',   icon: Settings, action: () => {} },
+]
 
   return (
     <div
       className={cn(
-        'absolute right-0 top-full mt-2 w-56 rounded-lg border overflow-hidden z-modal animate-slide-in-up',
+        'absolute right-0 top-full mt-2 w-56 rounded-lg border overflow-hidden z-[110] animate-slide-in-up',
         isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-border'
       )}
     >
@@ -280,7 +283,7 @@ export default function LayoutHeader({ collapsed, onToggle, isDark, toggleTheme 
   return (
     <header
       className={cn(
-        'fixed top-0 right-0 z-overlay h-16 flex items-center px-4 gap-3 border-b transition-all duration-300',
+        'fixed top-0 right-0 z-[100] h-16 flex items-center px-4 gap-3 border-b transition-all duration-300',
         isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-border',
         collapsed ? 'left-16' : 'left-[240px]'
       )}
@@ -348,18 +351,18 @@ export default function LayoutHeader({ collapsed, onToggle, isDark, toggleTheme 
             <img
               src={MOCK_USER.image}
               alt={MOCK_USER.name}
-              className="w-7 h-7 rounded-md object-cover"
+              className="object-cover rounded-md w-7 h-7"
             />
           ) : (
-            <div className="w-7 h-7 rounded-md bg-primary flex items-center justify-center shrink-0">
-              <span className="text-white text-xs font-bold leading-none">
+            <div className="flex items-center justify-center rounded-md w-7 h-7 bg-primary shrink-0">
+              <span className="text-xs font-bold leading-none text-white">
                 {MOCK_USER.name.split(' ').slice(0, 2).map((p) => p[0]).join('')}
               </span>
             </div>
           )}
 
           {/* Name + role — hidden on small screens */}
-          <div className="hidden sm:block text-left">
+          <div className="hidden text-left sm:block">
             <p
               className={cn(
                 'text-xs font-semibold leading-none truncate max-w-[120px]',
