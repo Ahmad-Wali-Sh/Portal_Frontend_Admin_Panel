@@ -1,7 +1,9 @@
-import EmployeesPage from "../employee/employeePage";
+import EmployeesPage from "../employee/EmployeePage";
 import StudentsPage from "../student/StudentPage";
 import SubjectPage from "../subjects/SubjectPage";
 import CertificatePage from "../certificates/page/CertificatePage";
+import CurriculumPage from "../curriculum/CurriculumPage";  
+import ResourcePage from "../resources/ResourcePage"
 
 
 const routes = [
@@ -32,6 +34,18 @@ const routes = [
     {
         path: '/certificates',
         element: <CertificatePage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/curriculum',
+        element: <CurriculumPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/resources',
+        element: <ResourcePage />,
         layout: true,
         protected: false
     }

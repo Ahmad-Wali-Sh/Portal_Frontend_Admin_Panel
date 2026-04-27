@@ -66,7 +66,7 @@ function NotificationDropdown({ isDark, onClose }) {
   return (
     <div
       className={cn(
-        'absolute right-0 top-full mt-2 w-80 rounded-lg border overflow-hidden z-modal animate-slide-in-up',
+        'absolute right-0 top-full mt-2 w-80 rounded-lg border overflow-hidden z-[110] animate-slide-in-up',
         isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-border'
       )}
     >
@@ -182,7 +182,7 @@ function UserDropdown({ user, isDark, onClose }) {
   return (
     <div
       className={cn(
-        'absolute right-0 top-full mt-2 w-56 rounded-lg border overflow-hidden z-modal animate-slide-in-up',
+        'absolute right-0 top-full mt-2 w-56 rounded-lg border overflow-hidden z-[110] animate-slide-in-up',
         isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-border'
       )}
     >
@@ -280,7 +280,7 @@ export default function LayoutHeader({ collapsed, onToggle, isDark, toggleTheme 
   return (
     <header
       className={cn(
-        'fixed top-0 right-0 z-overlay h-16 flex items-center px-4 gap-3 border-b transition-all duration-300',
+        'fixed top-0 right-0 z-[100] h-16 flex items-center px-4 gap-3 border-b transition-all duration-300',
         isDark ? 'bg-gray-900 border-gray-800' : 'bg-white border-border',
         collapsed ? 'left-16' : 'left-[240px]'
       )}
