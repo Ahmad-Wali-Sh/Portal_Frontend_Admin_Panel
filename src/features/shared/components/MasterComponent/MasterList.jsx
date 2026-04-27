@@ -263,7 +263,7 @@ export default function MasterList({ config, isDark, onEdit }) {
   if (config._listRef) config._listRef.current = { refresh: fetchData };
 
   return (
-    <div className="space-y-4 relative z-0">
+    <div className="space-y-4 relative z-10">
       {/* ── Toolbar ──────────────────────────────────────────────────────── */}
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-3">
@@ -387,10 +387,11 @@ export default function MasterList({ config, isDark, onEdit }) {
                     onClick={() => toggleSort(col)}
                     style={{ width: col.width }}
                     className={cn(
-                      col.sortable &&
-                        "cursor-pointer select-none hover:text-foreground transition-colors",
-                      col.align === "right" && "text-right",
-                      col.align === "center" && "text-center",
+                    "sticky top-0 z-20",
+                    isDark ? "bg-gray-900" : "bg-white",
+                    col.sortable && "cursor-pointer select-none hover:text-foreground transition-colors",
+                    col.align === "right" && "text-right",
+                    col.align === "center" && "text-center",
                     )}
                   >
                     <span className="inline-flex items-center">
