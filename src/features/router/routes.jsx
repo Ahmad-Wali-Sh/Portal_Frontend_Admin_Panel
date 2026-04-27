@@ -1,3 +1,4 @@
+import ClassesPage from "../classes/ClassesPage";
 import EmployeesPage from "../employee/EmployeePage";
 import ProfilePage from "../profile/ProfilePage";
 import StudentsPage from "../student/StudentPage";
@@ -21,6 +22,11 @@ const routes = [
         protected: false
     },
     {
+        path: '/classes',
+        element: <ClassesPage />,
+        layout: true,
+        protected: false
+    }, {
         path:'/employees',
         element: <EmployeesPage/>,
         layout:true,
