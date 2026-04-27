@@ -1,4 +1,5 @@
 import EmployeesPage from "../employee/employeePage";
+import ProfilePage from "../profile/ProfilePage";
 import StudentsPage from "../student/StudentPage";
 import SubjectPage from "../subjects/SubjectPage";
 
@@ -27,6 +28,12 @@ const routes = [
         element: <SubjectPage />,
         layout: true,
         protected: false
+    },
+    {
+        path: '/profile',
+        element: <ProfilePage/>,
+        layout: true,
+        protected: false,
     }
 ]
 
