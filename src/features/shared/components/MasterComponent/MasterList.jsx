@@ -262,6 +262,8 @@ export default function MasterList({ config, isDark, onEdit }) {
   // Expose refresh so MasterComponent can trigger it
   if (config._listRef) config._listRef.current = { refresh: fetchData };
 
+  const totalColumns = columns.length + (config.hideActions ? 0 : 1); 
+
   return (
     <div className="space-y-4 relative z-10">
       {/* ── Toolbar ──────────────────────────────────────────────────────── */}
@@ -400,15 +402,15 @@ export default function MasterList({ config, isDark, onEdit }) {
                     </span>
                   </th>
                 ))}
-                {/* Edit action column */}
-                <th className="w-12" />
+                {/* Edit action column – conditionally rendered */}
+                {!config.hideActions && <th className="w-12" />}
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
                   <td
-                    colSpan={columns.length + 1}
+                    colSpan={totalColumns}
                     className="text-center py-12"
                   >
                     <Loader2
@@ -420,7 +422,7 @@ export default function MasterList({ config, isDark, onEdit }) {
               ) : data.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={columns.length + 1}
+                    colSpan={totalColumns}
                     className="text-center py-12"
                   >
                     <p className="text-sm text-muted-foreground">
@@ -451,22 +453,24 @@ export default function MasterList({ config, isDark, onEdit }) {
                         <CellValue column={col} row={row} />
                       </td>
                     ))}
-                    {/* Edit button */}
-                    <td className="text-right">
-                      <button
-                        onClick={() => onEdit(row)}
-                        title={`Edit ${config.entityName ?? "record"}`}
-                        className={cn(
-                          "inline-flex items-center justify-center w-7 h-7 rounded-md",
-                          "transition-all duration-200 hover:scale-110",
-                          isDark
-                            ? "text-gray-500 hover:bg-gray-700 hover:text-primary-300"
-                            : "text-muted-foreground hover:bg-primary-50 hover:text-primary-600",
-                        )}
-                      >
-                        <Pencil size={13} strokeWidth={2} />
-                      </button>
-                    </td>
+                    {/* Edit button – conditionally rendered */}
+                    {!config.hideActions && (
+                      <td className="text-right">
+                        <button
+                          onClick={() => onEdit(row)}
+                          title={`Edit ${config.entityName ?? "record"}`}
+                          className={cn(
+                            "inline-flex items-center justify-center w-7 h-7 rounded-md",
+                            "transition-all duration-200 hover:scale-110",
+                            isDark
+                              ? "text-gray-500 hover:bg-gray-700 hover:text-primary-300"
+                              : "text-muted-foreground hover:bg-primary-50 hover:text-primary-600",
+                          )}
+                        >
+                          <Pencil size={13} strokeWidth={2} />
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 ))
               )}
