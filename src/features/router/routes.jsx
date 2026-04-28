@@ -6,6 +6,7 @@ import SubjectPage from "../subjects/SubjectPage";
 import CertificatePage from "../certificates/page/CertificatePage";
 import CurriculumPage from "../curriculum/CurriculumPage";  
 import ResourcePage from "../resources/ResourcePage"
+import CyclePage from "../cycles/CyclePage"
 
 
 const routes = [
@@ -58,6 +59,12 @@ const routes = [
     {
         path: '/resources',
         element: <ResourcePage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/cycles',
+        element: <CyclePage />,
         layout: true,
         protected: false
     }

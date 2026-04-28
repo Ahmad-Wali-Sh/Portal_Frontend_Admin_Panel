@@ -259,6 +259,12 @@ function Field({ field, value, onChange, error, isDark }) {
       return <ToggleField {...props} />
     case 'file':
       return <FileField {...props} />
+    case 'custom':
+      if (field.component) {
+        const CustomComponent = field.component
+        return <CustomComponent {...props} />
+      }
+      return <div className="text-destructive text-sm">Custom component not defined</div>
     default:
       return <InputField {...props} />
   }
@@ -321,10 +327,13 @@ export default function MasterForm({ config, mode, record, isDark, onSuccess, on
   // Populate form when record changes (edit mode)
   useEffect(() => {
     if (mode === 'edit' && record) {
+      // Apply transformRecord if defined
+      const transformedRecord = config.transformRecord ? config.transformRecord(record) : record
+      
       const populated = buildInitial()
       for (const f of fields) {
         if (f.hidden) continue
-        const raw = record[f.key]
+        const raw = transformedRecord[f.key]
         populated[f.key] = raw !== undefined && raw !== null ? raw : (f.defaultValue ?? '')
       }
       setValues(populated)
