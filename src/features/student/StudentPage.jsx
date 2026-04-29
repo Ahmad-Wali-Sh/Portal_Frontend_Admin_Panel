@@ -8,6 +8,7 @@
 import React from 'react'
 import MasterComponent from '../shared/components/MasterComponent/MasterComponent'
 import { useThemeStore } from '../shared/store/useThemeStore'
+import { formatDate } from '../../utils/utils'
 
 export default function StudentsPage() {
   const { isDark } = useThemeStore()
@@ -16,6 +17,8 @@ export default function StudentsPage() {
   const studentsConfig = {
     apiPath:    '/api/students',
     entityName: 'Student',
+    recordIdKey: 'id',
+    getRecordId: (record) => record?.id ?? null,
   
     // ── List ──────────────────────────────────────────────────────────────────
     searchPlaceholder: 'Search by name, USID, phone…',
@@ -30,7 +33,7 @@ export default function StudentsPage() {
         sortable: true,
         width:    '120px',
         render:   (val) => (
-          <span className="font-mono text-xs font-semibold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">
+          <span className="inline-flex items-center whitespace-nowrap font-mono text-[11px] font-semibold tracking-wide text-primary-700 bg-primary-100/80 border border-primary-200 px-2.5 py-1 rounded-md">
             {val}
           </span>
         ),
