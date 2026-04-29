@@ -4,9 +4,10 @@ import ProfilePage from "../profile/ProfilePage";
 import StudentsPage from "../student/StudentPage";
 import SubjectPage from "../subjects/SubjectPage";
 import CertificatePage from "../certificates/page/CertificatePage";
-import CurriculumPage from "../curriculum/CurriculumPage";  
+import CurriculumPage from "../curriculum/CurriculumPage";
 import ResourcePage from "../resources/ResourcePage"
-import CyclePage from "../cycles/CyclePage"
+import CyclePage from "../cycles/CyclePage";
+import OverviewPage from "../overview/pages/OverviewPage";
 
 
 const routes = [
@@ -65,6 +66,12 @@ const routes = [
     {
         path: '/cycles',
         element: <CyclePage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/overview',
+        element: <OverviewPage />,
         layout: true,
         protected: false
     }
