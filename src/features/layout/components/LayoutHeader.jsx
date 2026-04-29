@@ -9,10 +9,11 @@ import {
   Settings,
   PanelLeftClose,
   PanelLeftOpen,
-} from "lucide-react";
-import { cn } from "../../../utils/utils";
-import { timeAgo } from "../../../utils/utils";
-import { useNavigate } from "react-router";
+} from 'lucide-react'
+import { cn } from '../../../utils/utils'
+import { timeAgo } from '../../../utils/utils'
+import { useNavigate } from 'react-router'
+
 
 // ── Mock data ─────────────────────────────────────────────────────────────────
 const MOCK_USER = {
@@ -179,13 +180,7 @@ function NotificationDropdown({ isDark, onClose }) {
           isDark ? "border-gray-800" : "border-border",
         )}
       >
-        <button
-          onClick={() => {
-            onClose();
-            navigate("/announcements");
-          }}
-          className="text-xs font-medium transition-colors text-primary hover:text-primary-700"
-        >
+        <button className="text-xs font-medium transition-colors text-primary hover:text-primary-700">
           View all notifications
         </button>
       </div>
@@ -195,18 +190,11 @@ function NotificationDropdown({ isDark, onClose }) {
 
 // ── Subcomponent: User Profile Dropdown ──────────────────────────────────────
 function UserDropdown({ user, isDark, onClose }) {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const menuItems = [
-    {
-      label: "My Profile",
-      icon: User,
-      action: () => {
-        navigate("/profile");
-        onClose();
-      },
-    },
-    { label: "Settings", icon: Settings, action: () => {} },
-  ];
+  { label: 'My Profile', icon: User, action: () => { navigate('/profile'); onClose() } },
+  { label: 'Settings',   icon: Settings, action: () => {} },
+]
 
   return (
     <div
@@ -419,6 +407,7 @@ export default function LayoutHeader({
                   .slice(0, 2)
                   .map((p) => p[0])
                   .join("")}
+                {MOCK_USER.name.split(' ').slice(0, 2).map((p) => p[0]).join('')}
               </span>
             </div>
           )}

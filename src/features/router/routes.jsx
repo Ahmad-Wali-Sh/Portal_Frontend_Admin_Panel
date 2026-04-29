@@ -4,10 +4,12 @@ import ProfilePage from "../profile/ProfilePage";
 import StudentsPage from "../student/StudentPage";
 import SubjectPage from "../subjects/SubjectPage";
 import CertificatePage from "../certificates/page/CertificatePage";
-import CurriculumPage from "../curriculum/CurriculumPage";  
+import CurriculumPage from "../curriculum/CurriculumPage";
+import CurriculumDetailsPage from "../curriculum/CurriculumDetailsPage";
 import ResourcePage from "../resources/ResourcePage"
 import CyclePage from "../cycles/CyclePage"
 import AnnouncementsPage from "../announcements/AnnouncementsPage";
+import OverviewPage from "../overview/pages/OverviewPage";
 
 
 const routes = [
@@ -58,6 +60,12 @@ const routes = [
         protected: false
     },
     {
+        path: '/curriculum/:id/details',
+        element: <CurriculumDetailsPage />,
+        layout: true,
+        protected: false
+    },
+    {
         path: '/resources',
         element: <ResourcePage />,
         layout: true,
@@ -72,6 +80,12 @@ const routes = [
     {
         path: '/announcements',
         element: <AnnouncementsPage />,
+        layout: true,
+        protected: false  
+    },
+    {
+        path: '/overview',
+        element: <OverviewPage />,
         layout: true,
         protected: false
     }

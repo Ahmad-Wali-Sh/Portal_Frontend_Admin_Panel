@@ -39,6 +39,7 @@ export const navConfig = [
       { label: 'Cycles',    path: '/cycles',   icon: RefreshCcw },
       { label: 'Classes',   path: '/classes',  icon: CalendarDays },
       { label: 'Subjects',  path: '/subjects', icon: BookOpen },
+      { label: 'Overview',  path: '/overview', icon: LayoutDashboard },
     ],
   },
   {
