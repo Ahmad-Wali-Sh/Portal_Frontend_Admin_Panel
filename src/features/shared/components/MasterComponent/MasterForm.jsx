@@ -259,6 +259,12 @@ function Field({ field, value, onChange, error, isDark }) {
       return <ToggleField {...props} />
     case 'file':
       return <FileField {...props} />
+    case 'custom':
+      if (field.component) {
+        const CustomComponent = field.component
+        return <CustomComponent {...props} />
+      }
+      return <div className="text-destructive text-sm">Custom component not defined</div>
     default:
       return <InputField {...props} />
   }
@@ -300,6 +306,12 @@ function validate(fields, values) {
  */
 export default function MasterForm({ config, mode, record, isDark, onSuccess, onDelete }) {
   const fields = config.fields ?? []
+  const resolveRecordId = useCallback((currentRecord) => {
+    if (!currentRecord) return null
+
+    const key = config.recordIdKey ?? 'id'
+    return currentRecord[key] ?? currentRecord.id ?? null
+  }, [config])
 
   // Build initial values
   const buildInitial = useCallback(() => {
@@ -321,10 +333,13 @@ export default function MasterForm({ config, mode, record, isDark, onSuccess, on
   // Populate form when record changes (edit mode)
   useEffect(() => {
     if (mode === 'edit' && record) {
+      // Apply transformRecord if defined
+      const transformedRecord = config.transformRecord ? config.transformRecord(record) : record
+      
       const populated = buildInitial()
       for (const f of fields) {
         if (f.hidden) continue
-        const raw = record[f.key]
+        const raw = transformedRecord[f.key]
         populated[f.key] = raw !== undefined && raw !== null ? raw : (f.defaultValue ?? '')
       }
       setValues(populated)
@@ -354,6 +369,7 @@ export default function MasterForm({ config, mode, record, isDark, onSuccess, on
       if (f.hidden || f.readOnly) continue
       if (mode === 'edit' && f.createOnly) continue
       const val = values[f.key]
+      if (f.type === 'file' && val instanceof File) continue
       payload[f.key] = val === '' ? null : val
     }
 
@@ -366,7 +382,11 @@ export default function MasterForm({ config, mode, record, isDark, onSuccess, on
         const res = await api.post(config.apiPath, finalPayload)
         onSuccess?.('created', res.data?.data)
       } else {
-        const res = await api.patch(`${config.apiPath}/${record.id}`, finalPayload)
+        const recordId = resolveRecordId(record)
+        if (recordId === null || recordId === undefined || recordId === '') {
+          throw new Error('Unable to update: record ID is missing.')
+        }
+        const res = await api.patch(`${config.apiPath}/${recordId}`, finalPayload)
         onSuccess?.('updated', res.data?.data)
       }
     } catch (err) {
@@ -380,7 +400,11 @@ export default function MasterForm({ config, mode, record, isDark, onSuccess, on
     if (!confirmDelete) { setConfirmDelete(true); return }
     setDeleting(true)
     try {
-      await api.delete(`${config.apiPath}/${record.id}`)
+      const recordId = resolveRecordId(record)
+      if (recordId === null || recordId === undefined || recordId === '') {
+        throw new Error('Unable to delete: record ID is missing.')
+      }
+      await api.delete(`${config.apiPath}/${recordId}`)
       onDelete?.()
     } catch (err) {
       setGlobalError(err.message)
