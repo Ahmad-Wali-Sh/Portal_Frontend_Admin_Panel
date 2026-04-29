@@ -7,6 +7,7 @@ import CertificatePage from "../certificates/page/CertificatePage";
 import CurriculumPage from "../curriculum/CurriculumPage";  
 import ResourcePage from "../resources/ResourcePage"
 import CyclePage from "../cycles/CyclePage"
+import AnnouncementsPage from "../announcements/AnnouncementsPage";
 
 
 const routes = [
@@ -65,6 +66,12 @@ const routes = [
     {
         path: '/cycles',
         element: <CyclePage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/announcements',
+        element: <AnnouncementsPage />,
         layout: true,
         protected: false
     }
