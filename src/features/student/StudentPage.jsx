@@ -15,7 +15,7 @@ export default function StudentsPage() {
 
 
   const studentsConfig = {
-    apiPath:    '/api/students',
+    apiPath: '/api/students',
     entityName: 'Student',
     recordIdKey: 'id',
     getRecordId: (record) => record?.id ?? null,
@@ -25,11 +25,11 @@ export default function StudentsPage() {
     defaultOrderBy: 'created_at:desc',
     pageSize: 15,
     emptyMessage: 'No students registered yet. Add your first student.',
-  
+
     columns: [
       {
-        key:      'usid',
-        label:    'USID',
+        key: 'usid',
+        label: 'USID',
         sortable: true,
         width:    '120px',
         render:   (val) => (
@@ -38,152 +38,152 @@ export default function StudentsPage() {
           </span>
         ),
       },
-      { key: 'name',        label: 'Full Name', sortable: true },
-      { key: 'lastname',    label: 'Last Name',  sortable: true },
-      { key: 'father_name', label: 'Father',     sortable: false },
-      { key: 'phone_1',     label: 'Phone' },
+      { key: 'name', label: 'Full Name', sortable: true },
+      { key: 'lastname', label: 'Last Name', sortable: true },
+      { key: 'father_name', label: 'Father', sortable: false },
+      { key: 'phone_1', label: 'Phone' },
       { key: 'gender.name', label: 'Gender' },
       {
-        key:    'created_at',
-        label:  'Registered',
+        key: 'created_at',
+        label: 'Registered',
         sortable: true,
         render: (val) => <span className="text-muted-foreground text-xs">{formatDate(val)}</span>,
       },
     ],
-  
+
     filters: [
       {
-        key:   'gender_id',
+        key: 'gender_id',
         label: 'Gender',
         fetchOptions: {
-          url:      '/api/genders',
+          url: '/api/genders',
           valueKey: 'id',
           labelKey: 'name',
         },
       },
     ],
-  
+
     // ── Form ──────────────────────────────────────────────────────────────────
     formSections: [
       {
-        title:   'Personal Information',
-        keys:    ['name', 'lastname', 'father_name', 'age', 'gender_id'],
+        title: 'Personal Information',
+        keys: ['name', 'lastname', 'father_name', 'age', 'gender_id'],
         columns: 2,
       },
       {
-        title:   'Contact',
-        keys:    ['phone_1', 'phone_2', 'responsible', 'home_address'],
+        title: 'Contact',
+        keys: ['phone_1', 'phone_2', 'responsible', 'home_address'],
         columns: 2,
       },
       {
-        title:   'Account',
-        keys:    ['password', 'image', 'note'],
+        title: 'Account',
+        keys: ['password', 'image', 'note'],
         columns: 2,
       },
     ],
-  
+
     fields: [
       {
-        key:         'name',
-        label:       'First Name',
-        type:        'text',
-        required:    true,
+        key: 'name',
+        label: 'First Name',
+        type: 'text',
+        required: true,
         placeholder: 'e.g. Ahmed',
       },
       {
-        key:         'lastname',
-        label:       'Last Name',
-        type:        'text',
-        required:    true,
+        key: 'lastname',
+        label: 'Last Name',
+        type: 'text',
+        required: true,
         placeholder: 'e.g. Al-Rashid',
       },
       {
-        key:         'father_name',
-        label:       'Father\'s Name',
-        type:        'text',
+        key: 'father_name',
+        label: 'Father\'s Name',
+        type: 'text',
         placeholder: 'e.g. Mohammed',
       },
       {
-        key:      'age',
-        label:    'Age',
-        type:     'number',
-        min:      5,
-        max:      100,
+        key: 'age',
+        label: 'Age',
+        type: 'number',
+        min: 5,
+        max: 100,
       },
       {
-        key:   'gender_id',
+        key: 'gender_id',
         label: 'Gender',
-        type:  'select',
+        type: 'select',
         fetchOptions: {
-          url:      '/api/genders',
+          url: '/api/genders',
           valueKey: 'id',
           labelKey: 'name',
         },
       },
       {
-        key:         'phone_1',
-        label:       'Primary Phone',
-        type:        'tel',
+        key: 'phone_1',
+        label: 'Primary Phone',
+        type: 'tel',
         placeholder: '+966 5X XXX XXXX',
       },
       {
-        key:         'phone_2',
-        label:       'Secondary Phone',
-        type:        'tel',
+        key: 'phone_2',
+        label: 'Secondary Phone',
+        type: 'tel',
         placeholder: 'Optional',
       },
       {
-        key:         'responsible',
-        label:       'Responsible Person',
-        type:        'text',
+        key: 'responsible',
+        label: 'Responsible Person',
+        type: 'text',
         placeholder: 'Guardian or emergency contact name',
       },
       {
-        key:         'home_address',
-        label:       'Home Address',
-        type:        'textarea',
-        rows:        2,
-        fullWidth:   true,
+        key: 'home_address',
+        label: 'Home Address',
+        type: 'textarea',
+        rows: 2,
+        fullWidth: true,
         placeholder: 'Full residential address',
       },
       {
-        key:        'password',
-        label:      'Password',
-        type:       'password',
+        key: 'password',
+        label: 'Password',
+        type: 'password',
         createOnly: true,           // only shown in New mode
-        required:   true,
+        required: true,
         placeholder: 'Initial login password',
-        hint:       'Must be at least 8 characters.',
-        validate:   (val) => val && val.length < 8 ? 'Password must be at least 8 characters' : null,
+        hint: 'Must be at least 8 characters.',
+        validate: (val) => val && val.length < 8 ? 'Password must be at least 8 characters' : null,
       },
       {
-        key:       'image',
-        label:     'Profile Photo',
-        type:      'file',
-        accept:    'image/*',
+        key: 'image',
+        label: 'Profile Photo',
+        type: 'file',
+        accept: 'image/*',
         fullWidth: false,
       },
       {
-        key:       'note',
-        label:     'Internal Note',
-        type:      'textarea',
-        rows:      2,
+        key: 'note',
+        label: 'Internal Note',
+        type: 'textarea',
+        rows: 2,
         fullWidth: true,
         placeholder: 'Visible to staff only',
       },
     ],
-  
+
     // Custom label shown in the "Editing:" badge in the tab bar
     getRecordLabel: (r) => `${r.name} ${r.lastname} (${r.usid})`,
-  
+
     allowDelete: true,
-  
+
     // Callbacks
     onCreated: (record) => console.log('[students] Created:', record?.usid),
     onUpdated: (record) => console.log('[students] Updated:', record?.id),
-    onDeleted: ()       => console.log('[students] Deleted'),
+    onDeleted: () => console.log('[students] Deleted'),
   }
-  
+
 
   return (
     <MasterComponent

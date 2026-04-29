@@ -482,3 +482,153 @@ export const curriculumConfig = {
   onUpdated: (record) => console.log('[Curriculum] Updated:', record?.id),
   onDeleted: () => console.log('[Curriculum] Deleted'),
 };
+
+// ────────────────────────────────────────────────────────────────
+// auditLogConfig.js
+// ────────────────────────────────────────────────────────────────
+
+export const auditLogConfig = {
+  apiPath:    '/api/audit-logs',
+  entityName: 'Audit Entry',
+
+  // ── List ────────────────────────────────────────────────
+  searchable:        true,
+  searchPlaceholder: 'Search by entity type or action…',   // limited by backend searchFields
+  defaultOrderBy:    'timestamp:desc',                     // matches backend orderBy
+  pageSize:          25,
+  emptyMessage:      'No audit entries found.',
+
+  columns: [
+    {
+      key:       'timestamp',
+      label:     'Timestamp',
+      sortable:  true,
+      width:     '180px',
+      render:    (val) => (
+        <span className="text-muted-foreground text-xs whitespace-nowrap">
+          {new Date(val).toLocaleString('en-GB', { 
+            day: '2-digit', month: 'short', year: 'numeric',
+            hour: '2-digit', minute: '2-digit', second: '2-digit'
+          })}
+        </span>
+      ),
+    },
+    {
+      key:      'actor',                        // nested object from include
+      label:    'Actor',
+      sortable: false,                          // Prisma sort on relation is complex; keep false
+      render:   (val) => (
+        <span className="font-medium text-sm">
+          {val ? `${val.name} ${val.lastname ?? ''}`.trim() : 'System'}
+        </span>
+      ),
+    },
+    {
+      key:      'action',
+      label:    'Action',
+      sortable: true,
+      width:    '100px',
+      render:   (val) => {
+        const colors = {
+          CREATE:  'bg-green-100 text-green-800',
+          UPDATE:  'bg-blue-100 text-blue-800',
+          DELETE:  'bg-red-100 text-red-800',
+          RESTORE: 'bg-purple-100 text-purple-800',
+        }
+        return (
+          <span className={`inline-block px-2 py-0.5 rounded text-xs font-semibold ${colors[val] || 'bg-gray-100 text-gray-800'}`}>
+            {val}
+          </span>
+        )
+      },
+    },
+    {
+      key:      'entity_type',
+      label:    'Entity',
+      sortable: true,
+      width:    '140px',
+      render:   (val) => (
+        <span className="text-xs uppercase tracking-wide text-muted-foreground">{val}</span>
+      ),
+    },
+    {
+      key:      'entity_id',
+      label:    'Entity ID',
+      sortable: true,
+      width:    '100px',
+      render:   (val) => (
+        <span className="font-mono text-xs">{val}</span>
+      ),
+    },
+    {
+      key:      'changes',                      // not a real field – we'll craft it from old/new
+      label:    'Changes',
+      sortable: false,
+      render:   (_, row) => {
+        if (row.action === 'CREATE') {
+          return <span className="text-green-700 text-xs font-medium">Created</span>
+        }
+        if (row.action === 'DELETE') {
+          return <span className="text-red-700 text-xs font-medium">Deleted</span>
+        }
+        if (!row.new_value && !row.old_value) {
+          return <span className="text-muted-foreground opacity-40">—</span>
+        }
+        // Show brief summary: number of changed fields
+        const newObj = row.new_value ?? {}
+        const oldObj = row.old_value ?? {}
+        const changedKeys = Object.keys(newObj).filter(k => newObj[k] !== oldObj[k])
+        const count = changedKeys.length
+        if (count === 0) return <span className="text-muted-foreground opacity-40">No changes</span>
+        return (
+          <span className="text-xs bg-muted px-2 py-0.5 rounded">
+            {count} field{count !== 1 ? 's' : ''} changed
+          </span>
+        )
+      },
+    },
+  ],
+
+  filters: [
+    {
+      key:     'action',
+      label:   'Action',
+      options: [
+        { value: 'CREATE',  label: 'Create' },
+        { value: 'UPDATE',  label: 'Update' },
+        { value: 'DELETE',  label: 'Delete' },
+        { value: 'RESTORE', label: 'Restore' },
+      ],
+    },
+    {
+      key:     'entity_type',
+      label:   'Entity Type',
+      // Keep static; add more as you add auditable entities
+      options: [
+        { value: 'student',      label: 'Student' },
+        { value: 'payment',      label: 'Payment' },
+        { value: 'exam_session', label: 'Exam Session' },
+        { value: 'employee',     label: 'Employee' },
+      ],
+    },
+    // Actor filter using fetchOptions – note the label key function
+    {
+      key:   'actor_name',
+      label: 'Actor',
+      fetchOptions: {
+        url:      '/api/employees',
+        valueKey: 'id',
+        labelKey: (emp) => `${emp.name} ${emp.lastname ?? ''}`.trim(),
+      },
+    },
+  ],
+
+  // ── Read‑only permissions ──────────────────────────────
+  permissions: {
+    create: () => false,
+    update: () => false,
+    delete: () => false,
+  },
+  hideActions: true,
+  allowDelete: false,
+}
