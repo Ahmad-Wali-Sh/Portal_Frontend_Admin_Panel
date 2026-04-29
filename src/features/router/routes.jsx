@@ -7,6 +7,7 @@ import CertificatePage from "../certificates/page/CertificatePage";
 import CurriculumPage from "../curriculum/CurriculumPage";
 import CurriculumDetailsPage from "../curriculum/CurriculumDetailsPage";
 import ResourcePage from "../resources/ResourcePage"
+import AuditLogPage from "../audit_log/AuditLogPage";
 import CyclePage from "../cycles/CyclePage"
 import AnnouncementsPage from "../announcements/AnnouncementsPage";
 import OverviewPage from "../overview/pages/OverviewPage";
@@ -68,6 +69,12 @@ const routes = [
     {
         path: '/resources',
         element: <ResourcePage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: 'audit',
+        element: <AuditLogPage />,
         layout: true,
         protected: false
     },
