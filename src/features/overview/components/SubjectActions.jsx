@@ -32,21 +32,26 @@ const SubjectActions = ({ subjectActivateId, currentStatus, onActionComplete }) 
     }
   }
 
-  const isActive = currentStatus === 'ACTIVE'
-
   return (
     <div className="flex gap-2">
-      <button
-        onClick={() => handleAction(isActive ? 'deactivate' : 'activate')}
-        disabled={loading || currentStatus === 'FINISHED'}
-        className={`px-3 py-1 text-xs font-medium rounded transition-colors disabled:opacity-50 ${
-          isActive
-            ? 'text-green-700 bg-green-100 hover:bg-green-200'
-            : 'text-gray-700 bg-gray-100 hover:bg-gray-200'
-        }`}
-      >
-        {loading ? 'Processing...' : isActive ? 'Active' : 'Inactive'}
-      </button>
+      {currentStatus !== 'ACTIVE' && (
+        <button
+          onClick={() => handleAction('activate')}
+          disabled={loading}
+          className="px-3 py-1 text-xs font-medium text-green-700 bg-green-100 rounded hover:bg-green-200 disabled:opacity-50"
+        >
+          Activate
+        </button>
+      )}
+      {currentStatus === 'ACTIVE' && (
+        <button
+          onClick={() => handleAction('deactivate')}
+          disabled={loading}
+          className="px-3 py-1 text-xs font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50"
+        >
+          Deactivate
+        </button>
+      )}
       {currentStatus !== 'FINISHED' && (
         <button
           onClick={() => handleAction('finish')}

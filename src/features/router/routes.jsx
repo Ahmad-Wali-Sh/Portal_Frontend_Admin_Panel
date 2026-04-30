@@ -10,8 +10,6 @@ import ResourcePage from "../resources/ResourcePage"
 import AuditLogPage from "../audit_log/AuditLogPage";
 import CyclePage from "../cycles/CyclePage"
 import AnnouncementsPage from "../announcements/AnnouncementsPage";
-import ResourcePage from "../resources/ResourcePage"
-import CyclePage from "../cycles/CyclePage";
 import OverviewPage from "../overview/pages/OverviewPage";
 
 

@@ -21,9 +21,10 @@ export default function CurriculumDetailsPage() {
   const { isDark } = useThemeStore();
 
   const [curriculum, setCurriculum] = useState(null);
-  const [entries, setEntries] = useState([]);
+  const [, setAllEntries] = useState([]); // تمام سیشن‌ها از API
+  const [entries, setEntries] = useState([]); // سیشن‌های فیلتر شده برای این Curriculum
   const [loading, setLoading] = useState(true);
-  const [subjects, setSubjects] = useState([]);
+  const [filteredSubjects, setFilteredSubjects] = useState([]);
   const [entryForm, setEntryForm] = useState({
     name: "",
     description: "",
@@ -36,24 +37,17 @@ export default function CurriculumDetailsPage() {
   const [formErrors, setFormErrors] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false); // for inline delete in edit form
-  const weekDays = [
-    "Saturday",
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-  ];
-  const listRef = useRef(null); // ref for session table to scroll into view
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const listRef = useRef(null);
 
-  // Fetch curriculum info
+  // دریافت اطلاعات curriculum (شامل cycle_id)
   useEffect(() => {
     const fetchCurriculum = async () => {
       try {
         const res = await api.get(`/api/curriculums/${id}`);
-        setCurriculum(res.data?.data);
-      // eslint-disable-next-line no-unused-vars
+        const data = res.data?.data;
+        setCurriculum(data);
+        // eslint-disable-next-line no-unused-vars
       } catch (err) {
         setErrorMessage("Failed to load curriculum details");
       }
@@ -61,28 +55,51 @@ export default function CurriculumDetailsPage() {
     fetchCurriculum();
   }, [id]);
 
-  // Fetch subjects
+  // دریافت تمام سابجکت‌های سایکل
   useEffect(() => {
-    const fetchSubjects = async () => {
+    const fetchCycleSubjects = async () => {
+      if (!curriculum?.cycle_id) return;
       try {
-        const res = await api.get("/api/subjects?limit=0");
-        setSubjects(res.data?.data || []);
-      // eslint-disable-next-line no-unused-vars
+        const res = await api.get("/api/cycle-subjects", {
+          params: { _limit: 0 },
+        });
+        const data = res.data?.data || [];
+        const filtered = data.filter(
+          (item) => item.cycle_id === parseInt(curriculum.cycle_id),
+        );
+        const subjects = filtered
+          .filter((item) => item.subject)
+          .map((item) => item.subject);
+        const unique = [];
+        const seen = new Set();
+        for (const sub of subjects) {
+          if (!seen.has(sub.id)) {
+            seen.add(sub.id);
+            unique.push(sub);
+          }
+        }
+        setFilteredSubjects(unique);
       } catch (err) {
-        setErrorMessage("Failed to load subjects");
+        console.error("Failed to load cycle subjects", err);
       }
     };
-    fetchSubjects();
-  }, []);
+    fetchCycleSubjects();
+  }, [curriculum?.cycle_id]);
 
-  // Fetch entries
+  // دریافت تمام سیشن‌ها و فیلتر کردن در فرانت‌اند
   const fetchEntries = async () => {
     try {
       const res = await api.get("/api/curriculum-entries", {
-        params: { curriculum_id: id },
+        params: { _limit: 0 },
       });
-      setEntries(res.data?.data || []);
-    // eslint-disable-next-line no-unused-vars
+      const all = res.data?.data || [];
+      setAllEntries(all);
+      // فیلتر کردن بر اساس curriculum_id جاری
+      const filtered = all.filter(
+        (entry) => entry.curriculum_id === parseInt(id),
+      );
+      setEntries(filtered);
+      // eslint-disable-next-line no-unused-vars
     } catch (err) {
       setErrorMessage("Failed to load sessions");
       setEntries([]);
@@ -114,7 +131,7 @@ export default function CurriculumDetailsPage() {
     setEntryForm({
       name: entry.name,
       description: entry.description || "",
-      date: entry.date.split("T")[0],
+      date: entry.date?.split("T")[0] || "",
       day: entry.day || "",
       subject_id: entry.subject_id,
     });
@@ -126,6 +143,7 @@ export default function CurriculumDetailsPage() {
     const errors = {};
     if (!entryForm.name.trim()) errors.name = "Session title is required";
     if (!entryForm.date) errors.date = "Date is required";
+    if (!entryForm.day) errors.day = "Day number is required";
     if (!entryForm.subject_id) errors.subject_id = "Subject is required";
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -143,7 +161,7 @@ export default function CurriculumDetailsPage() {
         name: entryForm.name.trim(),
         description: entryForm.description,
         date: entryForm.date,
-        day: entryForm.day || null,
+        day: entryForm.day,
         subject_id: parseInt(entryForm.subject_id),
         curriculum_id: parseInt(id),
       };
@@ -155,9 +173,8 @@ export default function CurriculumDetailsPage() {
         setSuccessMessage("Session added successfully");
       }
       resetEntryForm();
-      await fetchEntries();
+      await fetchEntries(); // دوباره فیلتر می‌کند
       setTimeout(() => setSuccessMessage(""), 3000);
-      // Scroll to session list after add/update
       if (listRef.current) {
         listRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
       }
@@ -185,13 +202,8 @@ export default function CurriculumDetailsPage() {
     }
   };
 
-  const requestDeleteInForm = () => {
-    setShowDeleteConfirm(true);
-  };
-
-  const cancelDeleteInForm = () => {
-    setShowDeleteConfirm(false);
-  };
+  const requestDeleteInForm = () => setShowDeleteConfirm(true);
+  const cancelDeleteInForm = () => setShowDeleteConfirm(false);
 
   if (loading && !curriculum) {
     return (
@@ -286,7 +298,7 @@ export default function CurriculumDetailsPage() {
                 )}
               >
                 <option value="">Select subject</option>
-                {subjects.map((s) => (
+                {filteredSubjects.map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.name}
                   </option>
@@ -298,6 +310,7 @@ export default function CurriculumDetailsPage() {
                 </p>
               )}
             </div>
+
             <div>
               <label className="block text-sm font-medium mb-1">
                 Session Date *
@@ -320,30 +333,32 @@ export default function CurriculumDetailsPage() {
                 <p className="text-red-500 text-xs mt-1">{formErrors.date}</p>
               )}
             </div>
+
             <div>
               <label className="block text-sm font-medium mb-1">
-                Day (optional)
+                Day Number *
               </label>
-              <select
+              <input
+                type="number"
+                min="1"
                 value={entryForm.day}
                 onChange={(e) =>
                   setEntryForm({ ...entryForm, day: e.target.value })
                 }
+                placeholder="e.g., 1, 2, 3..."
                 className={cn(
                   "w-full px-3 py-2 rounded-md border",
                   isDark
                     ? "bg-gray-800 border-gray-700"
                     : "bg-white border-gray-300",
+                  formErrors.day && "border-red-500",
                 )}
-              >
-                <option value="">Select day</option>
-                {weekDays.map((d) => (
-                  <option key={d} value={d}>
-                    {d}
-                  </option>
-                ))}
-              </select>
+              />
+              {formErrors.day && (
+                <p className="text-red-500 text-xs mt-1">{formErrors.day}</p>
+              )}
             </div>
+
             <div>
               <label className="block text-sm font-medium mb-1">
                 Session Title *
@@ -354,7 +369,7 @@ export default function CurriculumDetailsPage() {
                 onChange={(e) =>
                   setEntryForm({ ...entryForm, name: e.target.value })
                 }
-                placeholder="e.g., Session 1 - Introduction"
+                placeholder="e.g., Introduction to Grammar"
                 className={cn(
                   "w-full px-3 py-2 rounded-md border",
                   isDark
@@ -367,9 +382,10 @@ export default function CurriculumDetailsPage() {
                 <p className="text-red-500 text-xs mt-1">{formErrors.name}</p>
               )}
             </div>
+
             <div className="md:col-span-2">
               <label className="block text-sm font-medium mb-1">
-                What We Learned / Content
+                What will be taught / Content *
               </label>
               <textarea
                 value={entryForm.description}
@@ -377,16 +393,18 @@ export default function CurriculumDetailsPage() {
                   setEntryForm({ ...entryForm, description: e.target.value })
                 }
                 rows="3"
-                placeholder="Describe what was taught in this session..."
+                placeholder="Describe what will be taught in this session..."
                 className={cn(
                   "w-full px-3 py-2 rounded-md border",
                   isDark
                     ? "bg-gray-800 border-gray-700"
                     : "bg-white border-gray-300",
                 )}
+                required
               />
             </div>
           </div>
+
           <div className="flex gap-2 items-center">
             <button
               type="submit"
@@ -440,7 +458,7 @@ export default function CurriculumDetailsPage() {
         </form>
       </div>
 
-      {/* Table of sessions with ref for scroll */}
+      {/* Table of sessions */}
       <div
         ref={listRef}
         className={cn(
@@ -458,11 +476,11 @@ export default function CurriculumDetailsPage() {
             <thead className={isDark ? "bg-gray-800" : "bg-gray-50"}>
               <tr>
                 <th className="px-4 py-3 text-left">#</th>
+                <th className="px-4 py-3 text-left">Day</th>
                 <th className="px-4 py-3 text-left">Subject</th>
                 <th className="px-4 py-3 text-left">Date</th>
-                <th className="px-4 py-3 text-left">Day</th>
                 <th className="px-4 py-3 text-left">Session Title</th>
-                <th className="px-4 py-3 text-left">What We Learned</th>
+                <th className="px-4 py-3 text-left">What will be taught</th>
                 <th className="px-4 py-3 text-left">Actions</th>
               </tr>
             </thead>
@@ -483,30 +501,36 @@ export default function CurriculumDetailsPage() {
                   </td>
                 </tr>
               ) : (
-                entries.map((entry, idx) => (
-                  <tr key={entry.id} className="border-t">
-                    <td className="px-4 py-3">{idx + 1}</td>
-                    <td className="px-4 py-3 font-medium">
-                      {entry.subject?.name}
-                    </td>
-                    <td className="px-4 py-3">
-                      {new Date(entry.date).toLocaleDateString()}
-                    </td>
-                    <td className="px-4 py-3">{entry.day || "—"}</td>
-                    <td className="px-4 py-3 font-semibold">{entry.name}</td>
-                    <td className="px-4 py-3 text-muted-foreground">
-                      {entry.description || "—"}
-                    </td>
-                    <td className="px-4 py-3">
-                      <button
-                        onClick={() => handleEditEntry(entry)}
-                        className="text-blue-600 hover:text-blue-700"
-                      >
-                        <Edit2 size={16} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                [...entries]
+                  .sort(
+                    (a, b) => (parseInt(a.day) || 0) - (parseInt(b.day) || 0),
+                  )
+                  .map((entry, idx) => (
+                    <tr key={entry.id} className="border-t">
+                      <td className="px-4 py-3">{idx + 1}</td>
+                      <td className="px-4 py-3 font-mono font-bold text-primary-600">
+                        {entry.day || "—"}
+                      </td>
+                      <td className="px-4 py-3 font-medium">
+                        {entry.subject?.name}
+                      </td>
+                      <td className="px-4 py-3">
+                        {new Date(entry.date).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-3 font-semibold">{entry.name}</td>
+                      <td className="px-4 py-3 text-muted-foreground">
+                        {entry.description || "—"}
+                      </td>
+                      <td className="px-4 py-3">
+                        <button
+                          onClick={() => handleEditEntry(entry)}
+                          className="text-blue-600 hover:text-blue-700"
+                        >
+                          <Edit2 size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
               )}
             </tbody>
           </table>
