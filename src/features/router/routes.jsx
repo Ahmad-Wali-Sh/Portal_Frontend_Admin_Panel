@@ -4,8 +4,10 @@ import ProfilePage from "../profile/ProfilePage";
 import StudentsPage from "../student/StudentPage";
 import SubjectPage from "../subjects/SubjectPage";
 import CertificatePage from "../certificates/page/CertificatePage";
-import CurriculumPage from "../curriculum/CurriculumPage";  
+import CurriculumPage from "../curriculum/CurriculumPage";
+import CurriculumDetailsPage from "../curriculum/CurriculumDetailsPage";
 import ResourcePage from "../resources/ResourcePage"
+import AuditLogPage from "../audit_log/AuditLogPage";
 import CyclePage from "../cycles/CyclePage"
 import DashboardPage from "../dashboard/DashboardPage"
 import {
@@ -25,6 +27,8 @@ import {
     OverallTeachersPage,
     OverallCoursesPage,
 } from "../dashboard/DashboardPages"
+import AnnouncementsPage from "../announcements/AnnouncementsPage";
+import OverviewPage from "../overview/pages/OverviewPage";
 
 
 const routes = [
@@ -171,14 +175,38 @@ const routes = [
         protected: false
     },
     {
+        path: '/curriculum/:id/details',
+        element: <CurriculumDetailsPage />,
+        layout: true,
+        protected: false
+    },
+    {
         path: '/resources',
         element: <ResourcePage />,
         layout: true,
         protected: false
     },
     {
+        path: 'audit',
+        element: <AuditLogPage />,
+        layout: true,
+        protected: false
+    },
+    {
         path: '/cycles',
         element: <CyclePage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/announcements',
+        element: <AnnouncementsPage />,
+        layout: true,
+        protected: false  
+    },
+    {
+        path: '/overview',
+        element: <OverviewPage />,
         layout: true,
         protected: false
     }
