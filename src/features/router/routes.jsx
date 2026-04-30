@@ -11,6 +11,7 @@ import AuditLogPage from "../audit_log/AuditLogPage";
 import CyclePage from "../cycles/CyclePage"
 import AnnouncementsPage from "../announcements/AnnouncementsPage";
 import OverviewPage from "../overview/pages/OverviewPage";
+import SettingsPage from "../settings/SettingsPage";
 
 
 const routes = [
@@ -89,6 +90,12 @@ const routes = [
         element: <AnnouncementsPage />,
         layout: true,
         protected: false  
+    }, 
+    {
+        path: '/settings',
+        element: <SettingsPage />,
+        layout: true,
+        protected: false
     },
     {
         path: '/overview',
