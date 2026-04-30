@@ -29,6 +29,7 @@ import {
 } from "../dashboard/DashboardPages"
 import AnnouncementsPage from "../announcements/AnnouncementsPage";
 import OverviewPage from "../overview/pages/OverviewPage";
+import SettingsPage from "../settings/SettingsPage";
 
 
 const routes = [
@@ -203,6 +204,12 @@ const routes = [
         element: <AnnouncementsPage />,
         layout: true,
         protected: false  
+    }, 
+    {
+        path: '/settings',
+        element: <SettingsPage />,
+        layout: true,
+        protected: false
     },
     {
         path: '/overview',
