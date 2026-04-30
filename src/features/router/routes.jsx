@@ -7,12 +7,126 @@ import CertificatePage from "../certificates/page/CertificatePage";
 import CurriculumPage from "../curriculum/CurriculumPage";  
 import ResourcePage from "../resources/ResourcePage"
 import CyclePage from "../cycles/CyclePage"
+import DashboardPage from "../dashboard/DashboardPage"
+import {
+    TeachersDashboardPage,
+    StudentsDashboardPage,
+    CoursesDashboardPage,
+    OverallDashboardPage,
+    TeacherAttendancePage,
+    StudentDroppedPage,
+    StudentDowngradeScoresPage,
+    TopStudentsPage,
+    StudentOverallAbsentPage,
+    CourseNewStudentsPage,
+    CourseOverallStudentsPage,
+    CourseOverallAbsentPage,
+    OverallStudentsPage,
+    OverallTeachersPage,
+    OverallCoursesPage,
+} from "../dashboard/DashboardPages"
 
 
 const routes = [
     {
         path: '/',
-        element: <h1>Hello</h1>,
+        element: <DashboardPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard',
+        element: <DashboardPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/teachers',
+        element: <TeachersDashboardPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/teachers/attendance',
+        element: <TeacherAttendancePage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/students',
+        element: <StudentsDashboardPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/students/dropped',
+        element: <StudentDroppedPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/students/downgrade-scores',
+        element: <StudentDowngradeScoresPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/students/top-students',
+        element: <TopStudentsPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/students/overall-absent',
+        element: <StudentOverallAbsentPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/courses',
+        element: <CoursesDashboardPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/courses/new-students',
+        element: <CourseNewStudentsPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/courses/overall-students',
+        element: <CourseOverallStudentsPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/courses/overall-absent',
+        element: <CourseOverallAbsentPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/overall',
+        element: <OverallDashboardPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/overall/students',
+        element: <OverallStudentsPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/overall/teachers',
+        element: <OverallTeachersPage />,
+        layout: true,
+        protected: false
+    },
+    {
+        path: '/dashboard/overall/courses',
+        element: <OverallCoursesPage />,
         layout: true,
         protected: false
     },
